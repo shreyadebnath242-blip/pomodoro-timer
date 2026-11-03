@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pomodoro Timer</title>
+  <style>
+    body { font-family: Georgia, serif; background: #1e1a17; color: #f0e6d8;
+           display: flex; flex-direction: column; align-items: center;
+           justify-content: center; min-height: 100vh; margin: 0; }
+
+    /* Two stacked background layers that crossfade into each other */
+    .bg { position: fixed; inset: 0; z-index: -1;
+          background-size: cover; background-position: center;
+          opacity: 0; transition: opacity 1.5s ease-in-out; }
+    .bg.visible { opacity: 1; }
+    /* dark overlay so the text stays readable on any photo */
+    .overlay { position: fixed; inset: 0; z-index: -1; background: rgba(20, 15, 12, 0.6); }
+
+    #time { font-size: 5rem; margin: 20px 0; }
+    #mode { font-size: 1.3rem; opacity: 0.8; }
+    button { background: #8b5e3c; color: #fff; border: none; padding: 10px 20px;
+             margin: 5px; border-radius: 8px; font-size: 1rem; cursor: pointer; }
+    button:hover { background: #a8744d; }
+  </style>
+</head>
+<body>
+  <div class="bg visible" id="bgA"></div>
+  <div class="bg" id="bgB"></div>
+  <div class="overlay"></div>
+
+  <div id="mode">Focus time</div>
+  <div id="time">25:00</div>
+  <div>
+    <button id="start">Start</button>
+    <button id="pause">Pause</button>
+    <button id="reset">Reset</button>
+  </div>
+
+  <script>
+    // ---------- Background photo transitions ----------
+    // Put your own photos in an "images" folder next to index.html
+    // and list their file names here.
+    const photos = ["images/pom1.jpg", "images/pom2.jpg", "images/pom3.jpg", "images/pom4.jpg", "images/pom.jpg"];
+    const layers = [document.getElementById("bgA"), document.getElementById("bgB")];
+    let photoIndex = 0;
+    let activeLayer = 0;
+
+    layers[0].style.backgroundImage = `url(${photos[0]})`;
+
+    function changePhoto() {
+      photoIndex = (photoIndex + 1) % photos.length;
+      const next = 1 - activeLayer;
+      layers[next].style.backgroundImage = `url(${photos[photoIndex]})`;
+      layers[next].classList.add("visible");     // fade the new photo in
+      layers[activeLayer].classList.remove("visible"); // fade the old one out
+      activeLayer = next;
+    }
+    setInterval(changePhoto, 8000); // change every 8 seconds
+
+    // ---------- Timer ----------
+    const FOCUS = 25 * 60;
+    const BREAK = 5 * 60;
+    let seconds = FOCUS;
+    let isFocus = true;
+    let timer = null;
+
+    const timeEl = document.getElementById("time");
+    const modeEl = document.getElementById("mode");
+
+    function render() {
+      const m = String(Math.floor(seconds / 60)).padStart(2, "0");
+      const s = String(seconds % 60).padStart(2, "0");
+      timeEl.textContent = `${m}:${s}`;
+      document.title = `${m}:${s} - Pomodoro`;
+    }
+
+    function tick() {
+      seconds--;
+      if (seconds < 0) {
+        isFocus = !isFocus;
+        seconds = isFocus ? FOCUS : BREAK;
+        modeEl.textContent = isFocus ? "Focus time" : "Break time";
+        alert(isFocus ? "Back to work!" : "Take a break!");
+      }
+      render();
+    }
+
+    document.getElementById("start").onclick = () => {
+      if (!timer) timer = setInterval(tick, 1000);
+    };
+    document.getElementById("pause").onclick = () => {
+      clearInterval(timer);
+      timer = null;
+    };
+    document.getElementById("reset").onclick = () => {
+      clearInterval(timer);
+      timer = null;
+      isFocus = true;
+      seconds = FOCUS;
+      modeEl.textContent = "Focus time";
+      render();
+    };
+
+    render();
+  </script>
+</body>
+</html>
