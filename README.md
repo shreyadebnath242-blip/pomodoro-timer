@@ -1,7 +1,7 @@
 # Pomodoro Timer
 
 A simple Pomodoro timer built with HTML, CSS and JavaScript to help me study in focused sessions.
-https://shreyadebnath242-blip.github.io/pomodoro-timer/
+site- https://shreyadebnath242-blip.github.io/pomodoro-timer/
 
 ## Features
 - 25-minute focus sessions and 5-minute breaks, switching automatically
@@ -19,6 +19,7 @@ https://shreyadebnath242-blip.github.io/pomodoro-timer/
 
 ## How to run
 Download `index.html` and open it in any browser. No installation needed.
+or site- https://shreyadebnath242-blip.github.io/pomodoro-timer/
 
 ## What I learned
 - Using `setInterval` and `clearInterval` for timers
