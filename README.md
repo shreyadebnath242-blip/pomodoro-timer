@@ -1,6 +1,7 @@
 # Pomodoro Timer
 
 A simple Pomodoro timer built with HTML, CSS and JavaScript to help me study in focused sessions.
+
 site- https://shreyadebnath242-blip.github.io/pomodoro-timer/
 
 ## Features
